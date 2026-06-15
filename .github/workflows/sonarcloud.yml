@@ -1,0 +1,41 @@
+name: SonarCloud
+
+on:
+  push:
+    branches: [main, master]
+
+  pull_request:
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=Sambit-rgb_Py-michealkeines
+            -Dsonar.organization=sambit-rgb
+            -Dsonar.scm.provider=git
+            -Dsonar.python.version=3.12
+            -Dsonar.sources=.
+            -Dsonar.plsql.file.suffixes=.pks,.pkb
